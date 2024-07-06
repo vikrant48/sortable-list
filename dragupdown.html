@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Sortable Paragraph List</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Sortable Paragraph List</h1>
+        <ul id="sortable" class="sortable-list">
+             
+        </ul>
+        <div class="input-container">
+            <input type="text" id="newParagraph" placeholder="Enter new paragraph" />
+            <button id="addBtn">Add Paragraph</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="Sortable.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#sortable").sortable();
+            $("#sortable").disableSelection();
+
+            $("#addBtn").click(function() {
+                var newParagraphText = $("#newParagraph").val();
+                if (newParagraphText.trim() !== "") {
+                    var newParagraph = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
+                    $("#sortable").append(newParagraph);
+                    $("#newParagraph").val("");
+
+                    // Add click event to newly added paragraph
+                    $("#sortable li:last-child p").click(function() {
+                    var $paragraph = $(this);
+                    $paragraph.addClass('expanded');
+                    setTimeout(function() {
+                    $paragraph.removeClass('expanded');
+                    }, 5000); // 5 seconds
+            });
+                }
+            });
+
+            $(document).on("click", ".delete-btn", function() {
+                $(this).closest("li").remove();
+            });
+        });
+    </script>
+</body>
+</html>

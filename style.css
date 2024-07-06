@@ -1,0 +1,124 @@
+/* styles.css */
+body {
+    background-color: #f0f0f0; /* Light gray background for the entire page */
+}
+
+.container {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #fff; /* White background for the container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+}
+
+.sortable-list {
+    list-style-type: none;
+    margin: -5px;
+    padding: 0;
+    width: 99%;
+    background-color: #e9f5fe; /* Light blue background for the sortable list */
+    border: 1px solid #6c7a85;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.sortable-list li {
+    margin: 0 0 10px 0;
+    padding: 10px 15px;
+    background-color: #6fd2eb2f; /* White background for list items */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: space-between;
+}
+
+.sortable-list li span {
+    cursor: grab;
+    margin-right: 15px;
+}
+
+.sortable-list li p {
+    flex: 1; /* Allow paragraph to grow */
+    margin: 0;
+    padding-right: 10px; /* Padding to ensure space between text and delete button */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate long text with ellipsis */
+    white-space: nowrap; /* Prevent paragraph from wrapping */
+}
+
+.input-container {
+    margin-top: 20px; /* Add spacing between list and input */
+    display: flex;
+    justify-content: space-between;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #191717;
+    border-radius: 5px;
+}
+
+.input-container button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.input-container button:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+/* Additional style for expanding paragraphs */
+.ui-state-default p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: height 0.3s ease;
+}
+
+.ui-state-default p.expanded {
+    white-space: normal;
+    height: auto;
+}
+
+
+/* Media Query for Small Screens */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .input-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-container input {
+        width: 90%;
+        margin-bottom: 10px;
+    }
+    
+}
