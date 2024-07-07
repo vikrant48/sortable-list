@@ -107,7 +107,12 @@ body {
     white-space: normal;
     height: auto;
 }
-
+.ghost {
+    opacity: 0;
+}
+.chosen {
+    background: #e0e0e0;
+}
 
 /* Media Query for Small Screens */
 @media (max-width: 600px) {

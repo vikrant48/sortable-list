@@ -10,25 +10,32 @@
 <body>
     <div class="container">
         <h1>Dynamic Sortable Paragraph List</h1>
-        <ul id="sortable" class="sortable-list"></ul>
+        <ul id="sortable" class="sortable-list">
+            <li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s "></span>Paragraph 1 <button class="delete-btn ">Delete</button></li>
+            <li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s "></span>Paragraph 2 <button class="delete-btn ">Delete</button></li>
+        </ul>
         <div class="input-container">
             <input type="text" id="newParagraph" placeholder="Enter new paragraph" />
             <button id="addBtn">Add Paragraph</button>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="Sortable.min.js"></script>
     <script>
         $(document).ready(function() {
-            $("#sortable").sortable();
-            $("#sortable").disableSelection();
+            var sortable = new Sortable(document.getElementById('sortable'), {
+                animation: 100,
+                draggable: '.draggable-item' ,
+                ghostClass: 'ghost', 
+                chosenClass: 'chosen', 
+                forceFallback: false, 
+            });            
 
             $("#addBtn").click(function() {
                 var newParagraphText = $("#newParagraph").val();
                 if (newParagraphText.trim() !== "") {
-                    var newParagraph = '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
+                    var newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
                     $("#sortable").append(newParagraph);
                     $("#newParagraph").val("");
 
