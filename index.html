@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Sortable Paragraph List</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
     <div class="container">
@@ -16,14 +17,13 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="Sortable.min.js"></script>
     <script>
         $(document).ready(function() {
-            var sortable = new Sortable(document.getElementById('sortable'), {
-                animation: 150,
-                ghostClass: 'sortable-ghost'
-            });
+            $("#sortable").sortable();
+            $("#sortable").disableSelection();
 
             $("#addBtn").click(function() {
                 var newParagraphText = $("#newParagraph").val();
@@ -39,7 +39,7 @@
                     setTimeout(function() {
                     $paragraph.removeClass('expanded');
                     }, 5000); // 5 seconds
-                    });
+            });
                 }
             });
 
