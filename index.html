@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Sortable Paragraph List</title>
+    <title>Dynamic Sortable List</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
     <div class="container">
-        <h1>Dynamic Sortable Paragraph List</h1>
+        <h1>Dynamic Sortable List</h1>
         <ul id="sortable" class="sortable-list">
-            <li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s "></span>Paragraph 1 <button class="delete-btn ">Delete</button></li>
-            <li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s "></span>Paragraph 2 <button class="delete-btn ">Delete</button></li>
+            
         </ul>
         <div class="input-container">
             <input type="text" id="newParagraph" placeholder="Enter new paragraph" />
-            <button id="addBtn">Add Paragraph</button>
+            <button id="addBtn">Add </button>
+            <button id="addFileBtn">Add File</button>
+            <button id="resetBtn">Reset </button>
+            <button id="downloadBtn">Download </button>
+            <input type="file" id="fileInput" accept=".txt" style="display: none;" />
         </div>
     </div>
 
@@ -24,34 +27,80 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            var sortable = new Sortable(document.getElementById('sortable'), {
+            let sortable = new Sortable(document.getElementById('sortable'), {
                 animation: 100,
                 draggable: '.draggable-item' ,
                 ghostClass: 'ghost', 
                 chosenClass: 'chosen', 
                 forceFallback: false, 
-            });            
+            });   
+            
+            
+            function resetParagraphs() {
+                $('#sortable').empty();
+                localStorage.removeItem('paragraphs');
+            }
 
             $("#addBtn").click(function() {
-                var newParagraphText = $("#newParagraph").val();
+                let newParagraphText = $("#newParagraph").val();
                 if (newParagraphText.trim() !== "") {
-                    var newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
+                    let newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
                     $("#sortable").append(newParagraph);
                     $("#newParagraph").val("");
 
                     // Add click event to newly added paragraph
                     $("#sortable li:last-child p").click(function() {
-                    var $paragraph = $(this);
-                    $paragraph.addClass('expanded');
-                    setTimeout(function() {
-                    $paragraph.removeClass('expanded');
-                    }, 5000); // 5 seconds
-            });
+                       let $paragraph = $(this);
+                       $paragraph.addClass('expanded');
+                       setTimeout(function() {
+                           $paragraph.removeClass('expanded');
+                       }, 5000); // 5 seconds
+                    });
                 }
             });
 
             $(document).on("click", ".delete-btn", function() {
                 $(this).closest("li").remove();
+            });
+
+            $('#addFileBtn').click(function() {
+                $('#fileInput').click();
+            });
+
+            $('#fileInput').change(function(event) {
+                let file = event.target.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        let contents = e.target.result;
+                        let paragraphs = contents.split('\n');
+                        paragraphs.forEach(function(paragraph) {
+                            if (paragraph.trim() !== '') {
+                                let newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + paragraph.trim() + '</p><button class="delete-btn">Delete</button></li>';
+                                $('#sortable').append(newParagraph);
+                            }
+                        });
+                    };
+                    reader.readAsText(file);
+                }
+            });
+
+            $('#resetBtn').click(function() {
+                resetParagraphs();
+                alert('Lists reset!');
+            });
+            $('#downloadBtn').click(function() {
+                let paragraphs = [];
+                $('#sortable li p').each(function() {
+                    paragraphs.push($(this).text());
+                });
+                let blob = new Blob([paragraphs.join('\n')], { type: 'text/plain' });
+                let link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'your_list.txt';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             });
         });
     </script>
