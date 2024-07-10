@@ -14,7 +14,7 @@ body {
     background-color: #fff; /* White background for the container */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Adds a slight shadow */
 }
 
 .sortable-list {
@@ -115,6 +115,12 @@ body {
 }
 .chosen {
     background: #e0e0e0;
+}
+.footer_rights {
+    text-align: center;
+    color: rgb(98, 97, 101);
+    margin-top: 1%;
+    font-size: 13px;
 }
 
 /* Media Query for Small Screens */
