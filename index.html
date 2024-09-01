@@ -10,20 +10,19 @@
 <body>
     <div class="container">
         <h1>Dynamic Sortable List</h1>
-        <ul id="sortable" class="sortable-list">
-            
-        </ul>
+        <ul id="sortable" class="sortable-list"></ul>
         <div class="input-container">
             <input type="text" id="newParagraph" placeholder="Enter new paragraph" />
-            <button id="addBtn">Add </button>
+            <button id="addBtn">Add</button>
             <button id="addFileBtn">Add File</button>
-            <button id="resetBtn">Reset </button>
-            <button id="downloadBtn">Download </button>
+            <button id="resetBtn">Reset</button>
+            <button id="downloadBtn">Download</button>
+            <button id="micBtn">Add via Mic</button> <!-- New Button -->
             <input type="file" id="fileInput" accept=".txt" style="display: none;" />
         </div>
         <div class="footer_rights">
             Copyright &#169; 2024 All rights reserved | This is made by Vikrant with &#10084;
-        </div> 
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -32,34 +31,20 @@
         $(document).ready(function() {
             let sortable = new Sortable(document.getElementById('sortable'), {
                 animation: 100,
-                draggable: '.draggable-item' ,
-                ghostClass: 'ghost', 
-                chosenClass: 'chosen', 
-                forceFallback: false, 
-            });   
-            
-            
+                draggable: '.draggable-item',
+                ghostClass: 'ghost',
+                chosenClass: 'chosen',
+                forceFallback: false,
+            });
+
             function resetParagraphs() {
                 $('#sortable').empty();
                 localStorage.removeItem('paragraphs');
             }
 
             $("#addBtn").click(function() {
-                let newParagraphText = $("#newParagraph").val();
-                if (newParagraphText.trim() !== "") {
-                    let newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + newParagraphText + '</p><button class="delete-btn">Delete</button></li>';
-                    $("#sortable").append(newParagraph);
-                    $("#newParagraph").val("");
-
-                    // Add click event to newly added paragraph
-                    $("#sortable li:last-child p").click(function() {
-                       let $paragraph = $(this);
-                       $paragraph.addClass('expanded');
-                       setTimeout(function() {
-                           $paragraph.removeClass('expanded');
-                       }, 5000); // 5 seconds
-                    });
-                }
+                addNewParagraph($("#newParagraph").val());
+                $("#newParagraph").val("");
             });
 
             $(document).on("click", ".delete-btn", function() {
@@ -79,8 +64,7 @@
                         let paragraphs = contents.split('\n');
                         paragraphs.forEach(function(paragraph) {
                             if (paragraph.trim() !== '') {
-                                let newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + paragraph.trim() + '</p><button class="delete-btn">Delete</button></li>';
-                                $('#sortable').append(newParagraph);
+                                addNewParagraph(paragraph.trim());
                             }
                         });
                     };
@@ -92,6 +76,7 @@
                 resetParagraphs();
                 alert('Lists reset!');
             });
+
             $('#downloadBtn').click(function() {
                 let paragraphs = [];
                 $('#sortable li p').each(function() {
@@ -105,6 +90,39 @@
                 link.click();
                 document.body.removeChild(link);
             });
+
+            // New: Speech Recognition
+            let recognition;
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onresult = function(event) {
+                    let transcript = event.results[0][0].transcript;
+                    addNewParagraph(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    alert("Speech recognition error: " + event.error);
+                };
+            } else {
+                $('#micBtn').prop('disabled', true);
+                alert('Speech Recognition API is not supported in this browser.');
+            }
+
+            $('#micBtn').click(function() {
+                if (recognition) {
+                    recognition.start();
+                }
+            });
+
+            function addNewParagraph(text) {
+                if (text.trim() !== "") {
+                    let newParagraph = '<li class="ui-state-default draggable-item"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><p>' + text + '</p><button class="delete-btn">Delete</button></li>';
+                    $("#sortable").append(newParagraph);
+                }
+            }
         });
     </script>
 </body>
